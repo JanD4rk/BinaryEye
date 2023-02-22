@@ -1,6 +1,7 @@
 package de.markusfisch.android.binaryeye.app
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import java.util.*
 

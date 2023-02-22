@@ -70,16 +70,8 @@ class Preferences {
 			apply(TRY_HARDER, value)
 			field = value
 		}
-	var bulkMode = false
-		set(value) {
-			apply(BULK_MODE, value)
-			field = value
-		}
-	var bulkModeDelay = "500"
-		set(value) {
-			apply(BULK_MODE_DELAY, value)
-			field = value
-		}
+
+
 	var showToastInBulkMode = true
 		set(value) {
 			apply(SHOW_TOAST_IN_BULK_MODE, value)
@@ -100,26 +92,12 @@ class Preferences {
 			apply(BEEP_TONE_NAME, value)
 			field = value
 		}
-	var useHistory = false
-		set(value) {
-			apply(USE_HISTORY, value)
-			field = value
-		}
 	var ignoreConsecutiveDuplicates = true
 		set(value) {
 			apply(IGNORE_CONSECUTIVE_DUPLICATES, value)
 			field = value
 		}
-	var copyImmediately = false
-		set(value) {
-			apply(COPY_IMMEDIATELY, value)
-			field = value
-		}
-	var openImmediately = false
-		set(value) {
-			apply(OPEN_IMMEDIATELY, value)
-			field = value
-		}
+
 	var showMetaData = true
 		set(value) {
 			apply(SHOW_META_DATA, value)
@@ -165,21 +143,7 @@ class Preferences {
 			apply(SEND_SCAN_TYPE, value)
 			field = value
 		}
-	var customLocale: String = ""
-		set(value) {
-			apply(CUSTOM_LOCALE, value)
-			field = value
-		}
-	var indexOfLastSelectedFormat: Int = 0
-		set(value) {
-			apply(INDEX_OF_LAST_SELECTED_FORMAT, value)
-			field = value
-		}
-	var freeRotation = true
-		set(value) {
-			apply(FREE_ROTATION, value)
-			field = value
-		}
+
 
 	fun init(context: Context) {
 		preferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -205,11 +169,7 @@ class Preferences {
 		zoomBySwiping = preferences.getBoolean(ZOOM_BY_SWIPING, zoomBySwiping)
 		autoRotate = preferences.getBoolean(AUTO_ROTATE, autoRotate)
 		tryHarder = preferences.getBoolean(TRY_HARDER, tryHarder)
-		bulkMode = preferences.getBoolean(BULK_MODE, bulkMode)
-		bulkModeDelay = preferences.getString(
-			BULK_MODE_DELAY,
-			bulkModeDelay
-		) ?: bulkModeDelay
+
 		showToastInBulkMode = preferences.getBoolean(
 			SHOW_TOAST_IN_BULK_MODE,
 			showToastInBulkMode
@@ -219,19 +179,11 @@ class Preferences {
 		preferences.getString(BEEP_TONE_NAME, beepToneName)?.also {
 			beepToneName = it
 		}
-		useHistory = preferences.getBoolean(USE_HISTORY, useHistory)
 		ignoreConsecutiveDuplicates = preferences.getBoolean(
 			IGNORE_CONSECUTIVE_DUPLICATES,
 			ignoreConsecutiveDuplicates
 		)
-		copyImmediately = preferences.getBoolean(
-			COPY_IMMEDIATELY,
-			copyImmediately
-		)
-		openImmediately = preferences.getBoolean(
-			OPEN_IMMEDIATELY,
-			openImmediately
-		)
+
 		showMetaData = preferences.getBoolean(SHOW_META_DATA, showMetaData)
 		showHexDump = preferences.getBoolean(SHOW_HEX_DUMP, showHexDump)
 		showRecreation = preferences.getBoolean(SHOW_RECREATION, showRecreation)
@@ -255,14 +207,7 @@ class Preferences {
 		preferences.getString(SEND_SCAN_TYPE, sendScanType)?.also {
 			sendScanType = it
 		}
-		preferences.getString(CUSTOM_LOCALE, customLocale)?.also {
-			customLocale = it
-		}
-		indexOfLastSelectedFormat = preferences.getInt(
-			INDEX_OF_LAST_SELECTED_FORMAT,
-			indexOfLastSelectedFormat
-		)
-		freeRotation = preferences.getBoolean(FREE_ROTATION, freeRotation)
+
 	}
 
 	fun beepTone() = when (beepToneName) {
@@ -306,16 +251,11 @@ class Preferences {
 		private const val ZOOM_BY_SWIPING = "zoom_by_swiping"
 		private const val AUTO_ROTATE = "auto_rotate"
 		private const val TRY_HARDER = "try_harder"
-		private const val BULK_MODE = "bulk_mode"
-		private const val BULK_MODE_DELAY = "bulk_mode_delay"
 		private const val SHOW_TOAST_IN_BULK_MODE = "show_toast_in_bulk_mode"
 		private const val VIBRATE = "vibrate"
 		private const val BEEP = "beep"
 		private const val BEEP_TONE_NAME = "beep_tone_name"
-		private const val USE_HISTORY = "use_history"
 		private const val IGNORE_CONSECUTIVE_DUPLICATES = "ignore_consecutive_duplicates"
-		private const val OPEN_IMMEDIATELY = "open_immediately"
-		private const val COPY_IMMEDIATELY = "copy_immediately"
 		private const val SHOW_META_DATA = "show_meta_data"
 		private const val SHOW_HEX_DUMP = "show_hex_dump"
 		private const val SHOW_RECREATION = "show_recreation"
@@ -325,8 +265,5 @@ class Preferences {
 		private const val SEND_SCAN_ACTIVE = "send_scan_active"
 		private const val SEND_SCAN_URL = "send_scan_url"
 		private const val SEND_SCAN_TYPE = "send_scan_type"
-		private const val CUSTOM_LOCALE = "custom_locale"
-		private const val INDEX_OF_LAST_SELECTED_FORMAT = "index_of_last_selected_format"
-		private const val FREE_ROTATION = "free_rotation"
 	}
 }

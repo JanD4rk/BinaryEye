@@ -37,15 +37,10 @@ class DetectorView : View {
 		style = Paint.Style.FILL
 	}
 	private val dotRadius: Float
-	private val handleBitmap = resources.getBitmapFromDrawable(
-		R.drawable.button_crop
-	)
-	private val handleXRadius = handleBitmap.width / 2
-	private val handleYRadius = handleBitmap.height / 2
+
 	private val handlePos = Point(-1, -1)
 	private val handleHome = Point()
 	private val center = Point()
-	private val touchDown = Point()
 	private val distToFull: Int
 	private val minMoveThresholdSq: Int
 	private val cornerRadius: Int
@@ -53,7 +48,6 @@ class DetectorView : View {
 	private val padding: Int
 
 	private var coordinatesLast = 0
-	private var handleGrabbed = false
 	private var handleActive = false
 	private var minY = 0
 	private var maxY = 0
@@ -143,65 +137,6 @@ class DetectorView : View {
 		)
 	}
 
-	@SuppressLint("ClickableViewAccessibility")
-	override fun onTouchEvent(event: MotionEvent?): Boolean {
-		event ?: return super.onTouchEvent(event)
-		val x = event.x.roundToInt()
-		val y = event.y.roundToInt()
-		return when (event.actionMasked) {
-			MotionEvent.ACTION_DOWN -> {
-				if (prefs.showCropHandle) {
-					touchDown.set(x, y)
-					handleGrabbed = abs(x - handlePos.x) < handleXRadius &&
-							abs(y - handlePos.y) < handleYRadius
-					if (handleGrabbed) {
-						onRoiChange?.invoke()
-					}
-					handleGrabbed
-				} else {
-					false
-				}
-			}
-			MotionEvent.ACTION_MOVE -> {
-				if (handleGrabbed) {
-					handlePos.set(x, y)
-					handleActive = handleActive ||
-							distSq(handlePos, touchDown) > minMoveThresholdSq
-					if (handleActive) {
-						updateClipRect()
-						invalidate()
-					}
-					true
-				} else {
-					false
-				}
-			}
-			MotionEvent.ACTION_CANCEL -> {
-				if (handleGrabbed) {
-					snap(x, y)
-					handleGrabbed = false
-				}
-				false
-			}
-			MotionEvent.ACTION_UP -> {
-				if (handleGrabbed) {
-					if (!handleActive) {
-						setHandleToDefaultRoi()
-					} else {
-						snap(x, y)
-					}
-					if (handleActive) {
-						updateClipRect()
-						invalidate()
-					}
-					onRoiChanged?.invoke()
-					handleGrabbed = false
-				}
-				false
-			}
-			else -> super.onTouchEvent(event)
-		}
-	}
 
 	private fun setHandleToDefaultRoi() {
 		val mn = min(center.x, center.y) * .8f
@@ -246,8 +181,8 @@ class DetectorView : View {
 		minY = padding * 2
 		maxY = height - minY
 		handleHome.set(
-			width - handleXRadius - paddingRight - padding,
-			height - handleYRadius - paddingBottom - fabHeight
+			width  - paddingRight - padding,
+			height  - paddingBottom - fabHeight
 		)
 		if (handlePos.x == -2) {
 			setHandleToDefaultRoi()
@@ -264,9 +199,6 @@ class DetectorView : View {
 			canvas.drawClip()
 		}
 		canvas.drawDots()
-		if (prefs.showCropHandle) {
-			canvas.drawHandle()
-		}
 	}
 
 	private fun Canvas.drawDots() {
@@ -306,14 +238,7 @@ class DetectorView : View {
 		}
 	}
 
-	private fun Canvas.drawHandle() {
-		drawBitmap(
-			handleBitmap,
-			(handlePos.x - handleXRadius).toFloat(),
-			(handlePos.y - handleYRadius).toFloat(),
-			null
-		)
-	}
+
 
 	private fun updateClipRect() {
 		clampHandlePos()
